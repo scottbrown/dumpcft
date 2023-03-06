@@ -24,15 +24,6 @@ var rootCmd = &cobra.Command{
 	RunE:  handleRoot,
 }
 
-func activeRegions(ctx context.Context, client *ec2.Client) ([]ec2types.Region, error) {
-	resp, err := client.DescribeRegions(ctx, nil)
-	if err != nil {
-		return []ec2types.Region{}, err
-	}
-
-	return resp.Regions, nil
-}
-
 func validateOutputDir() error {
 	_, err := os.Stat(OutputDir)
 	if os.IsNotExist(err) {
