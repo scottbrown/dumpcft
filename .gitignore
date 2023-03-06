@@ -1,0 +1,2 @@
+# ignore derived directories
+.build
