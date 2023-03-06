@@ -65,11 +65,15 @@ func (d Dumper) Dump(ctx context.Context) (int, error) {
 			filename = d.buildFilename(accountId, arn.Region, *stack.StackName, "json")
 		}
 
-		file, err := os.Create(filename)
+		file, err := os.Create(filename) // #nosec G304 -- AWS is in trust boundary
 		if err != nil {
 			return 0, err
 		}
-		defer file.Close()
+    defer func() {
+      if err := file.Close(); err != nil { 
+        // TODO print error
+      }
+    }()
 
 		_, err = file.WriteString(*resp.TemplateBody)
 		if err != nil {
