@@ -41,7 +41,7 @@ func handleRoot(cmd *cobra.Command, args []string) error {
 	}
 	fmt.Printf("Writing CloudFormation templates to directory: %s\n", OutputDir)
 
-	cfg, err := config.LoadDefaultConfig(ctx)
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(DEFAULT_REGION), config.WithSharedConfigProfile(Profile))
 	if err != nil {
 		return err
 	}
