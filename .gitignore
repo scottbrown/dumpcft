@@ -1,2 +1,3 @@
 # ignore derived directories
 .build
+.dist
