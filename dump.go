@@ -69,11 +69,11 @@ func (d Dumper) Dump(ctx context.Context) (int, error) {
 		if err != nil {
 			return 0, err
 		}
-    defer func() {
-      if err := file.Close(); err != nil { 
-        // TODO print error
-      }
-    }()
+		defer func() {
+			if err := file.Close(); err != nil {
+				// TODO print error
+			}
+		}()
 
 		_, err = file.WriteString(*resp.TemplateBody)
 		if err != nil {

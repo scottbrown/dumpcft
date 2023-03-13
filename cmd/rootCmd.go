@@ -42,14 +42,14 @@ func handleRoot(cmd *cobra.Command, args []string) error {
 	}
 	fmt.Printf("Writing CloudFormation templates to directory: %s\n", OutputDir)
 
-  var cfg aws.Config
-  var err error
+	var cfg aws.Config
+	var err error
 
-  if Profile == "" {
-    cfg, err = config.LoadDefaultConfig(ctx, config.WithRegion(DEFAULT_REGION))
-  } else {
-    cfg, err = config.LoadDefaultConfig(ctx, config.WithRegion(DEFAULT_REGION), config.WithSharedConfigProfile(Profile))
-  }
+	if Profile == "" {
+		cfg, err = config.LoadDefaultConfig(ctx, config.WithRegion(DEFAULT_REGION))
+	} else {
+		cfg, err = config.LoadDefaultConfig(ctx, config.WithRegion(DEFAULT_REGION), config.WithSharedConfigProfile(Profile))
+	}
 
 	if err != nil {
 		return err
