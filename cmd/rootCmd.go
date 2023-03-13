@@ -7,6 +7,7 @@ import (
 
 	"github.com/scottbrown/dumpcft"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -41,7 +42,15 @@ func handleRoot(cmd *cobra.Command, args []string) error {
 	}
 	fmt.Printf("Writing CloudFormation templates to directory: %s\n", OutputDir)
 
-	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(DEFAULT_REGION), config.WithSharedConfigProfile(Profile))
+  var cfg aws.Config
+  var err error
+
+  if Profile == "" {
+    cfg, err = config.LoadDefaultConfig(ctx, config.WithRegion(DEFAULT_REGION))
+  } else {
+    cfg, err = config.LoadDefaultConfig(ctx, config.WithRegion(DEFAULT_REGION), config.WithSharedConfigProfile(Profile))
+  }
+
 	if err != nil {
 		return err
 	}
