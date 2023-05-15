@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/aws/aws-sdk-go-v2 v1.18.0
 	github.com/aws/aws-sdk-go-v2/config v1.18.22
-	github.com/aws/aws-sdk-go-v2/service/cloudformation v1.27.2
+	github.com/aws/aws-sdk-go-v2/service/cloudformation v1.27.4
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.97.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.19.0
 	github.com/spf13/cobra v1.7.0
