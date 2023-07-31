@@ -3,7 +3,7 @@ module github.com/scottbrown/dumpcft
 go 1.20
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.19.0
+	github.com/aws/aws-sdk-go-v2 v1.19.1
 	github.com/aws/aws-sdk-go-v2/config v1.18.28
 	github.com/aws/aws-sdk-go-v2/service/cloudformation v1.30.1
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.105.1
