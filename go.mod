@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.27.11
 	github.com/aws/aws-sdk-go-v2/service/cloudformation v1.51.1
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.162.0
-	github.com/aws/aws-sdk-go-v2/service/sts v1.28.9
+	github.com/aws/aws-sdk-go-v2/service/sts v1.28.10
 	github.com/spf13/cobra v1.8.0
 	golang.org/x/exp v0.0.0-20230304125523-9ff063c70017
 )
