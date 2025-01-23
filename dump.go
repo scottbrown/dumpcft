@@ -35,6 +35,7 @@ func (d Dumper) Dump(ctx context.Context) (int, error) {
 			stacks = append(stacks, s)
 		}
 
+		nextToken = resp.NextToken
 		if nextToken == nil {
 			break
 		}
