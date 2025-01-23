@@ -1,6 +1,8 @@
 module github.com/scottbrown/dumpcft
 
-go 1.20
+go 1.21
+
+toolchain go1.23.5
 
 require (
 	github.com/aws/aws-sdk-go-v2 v1.30.5
@@ -10,6 +12,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.30.7
 	github.com/spf13/cobra v1.8.1
 	golang.org/x/exp v0.0.0-20230304125523-9ff063c70017
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
