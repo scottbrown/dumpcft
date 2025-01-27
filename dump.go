@@ -1,6 +1,7 @@
 package dumpcft
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -10,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
 	cfntypes "github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
+	"gopkg.in/yaml.v3"
 )
 
 type Dumper struct {
@@ -59,10 +61,29 @@ func (d Dumper) Dump(ctx context.Context) (int, error) {
 			return 0, err
 		}
 
-		filename := d.buildFilename(accountId, arn.Region, *stack.StackName, "yaml")
+		templateBody := *resp.TemplateBody
 
-		if isJSON([]byte(*resp.TemplateBody)) {
+		var filename string
+		var formattedTemplate string
+
+		if isJSON([]byte(templateBody)) {
 			filename = d.buildFilename(accountId, arn.Region, *stack.StackName, "json")
+			var prettyJSON bytes.Buffer
+			if err := json.Indent(&prettyJSON, []byte(templateBody), "", "  "); err != nil {
+				return 0, fmt.Errorf("failed to format JSON: %w", err)
+			}
+			formattedTemplate = prettyJSON.String()
+		} else {
+			filename = d.buildFilename(accountId, arn.Region, *stack.StackName, "yaml")
+			var v interface{}
+			if err := yaml.Unmarshal([]byte(templateBody), &v); err != nil {
+				return 0, fmt.Errorf("failed to parse YAML: %w", err)
+			}
+			yamlBytes, err := yaml.Marshal(v)
+			if err != nil {
+				return 0, fmt.Errorf("failed to format YAML: %w", err)
+			}
+			formattedTemplate = string(yamlBytes)
 		}
 
 		file, err := os.Create(filename) // #nosec G304 -- AWS is in trust boundary
@@ -75,7 +96,7 @@ func (d Dumper) Dump(ctx context.Context) (int, error) {
 			}
 		}()
 
-		_, err = file.WriteString(*resp.TemplateBody)
+		_, err = file.WriteString(formattedTemplate)
 		if err != nil {
 			return 0, err
 		}
