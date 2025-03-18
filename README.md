@@ -1,57 +1,151 @@
 # dumpcft
 
-A simple CLI tool that will take an AWS profile, and an output directory,
-and dump all of the CloudFormation templates in every region into files
-on the local disk.
+`dumpcft` is a streamlined CLI tool for AWS CloudFormation template extraction. It allows you to export all CloudFormation templates from your AWS account to local files for documentation, backup, or analysis purposes.
 
-How is this helpful?  I don't know about any general case, but I needed it
-to solve a specific problem around code archaeology.
+## Features
+
+- Export CloudFormation templates from all or selected AWS regions
+- Automatic file format detection (YAML or JSON)
+- Consistent file naming with account ID, region, and stack name
+- Supports multiple AWS profiles
+
+## Installation
+
+### Pre-Built Binaries
+
+Download the latest release from the [releases page](https://github.com/scottbrown/dumpcft/releases) for your platform:
+
+- Linux (amd64, arm64)
+- MacOS (amd64, arm64)
+- Windows (amd64, arm64)
+
+### From Source
+
+If you have Go 1.24+ installed:
+
+```bash
+go install github.com/scottbrown/dumpcft/cmd@latest
+```
 
 ## Usage
 
-Dump templates from all regions into a pre-existing directory called `templates`.
+### Basic Usage
+
+Create an output directory and run `dumpcft`:
 
 ```bash
 mkdir templates
 dumpcft --profile PROFILE templates
-Writing CloudFormation templates to directory: templates.
 ```
 
-Specify a set of regions in a comma-delimited list.
+This will export all CloudFormation templates from all active regions to the `templates` directory.
+
+### Command Line Options
+
+```
+Usage:
+  dumpcft [flags] [output-directory]
+
+Flags:
+  -h, --help                  help for dumpcft
+  -o, --output-dir string     The directory where templates are persisted to disk (default "templates")
+  -p, --profile string        The AWS profile to use
+  -r, --regions string        One or more comma-delimited regions to dump
+  -v, --verbose               Shows debug output
+```
+
+### Examples
+
+### Specify Output Directory
 
 ```bash
-mkdir templates
-dumpcft --profile PROFILE --regions us-east-1,us-west-1 templates
-Writing CloudFormation templates to directory: templates.
+dumpcft --profile your-aws-profile -o /tmp/cfn-templates
 ```
 
-Write the templates to a directory of your choice.
+### Limit to Specific Regions
 
 ```bash
-dumpcft --profile PROFILE -o /tmp/templates
-Writing CloudFormation templates to directory: /tmp/templates
+dumpcft --profile your-aws-profile --regions us-east-1,us-west-2 templates
 ```
 
-All CloudFormation templates dumped by this tool will have the filename
-format:
+## File Format
+
+Templates are saved with the following naming convention:
 
 ```
-AWS_ACCOUNT_ID.REGION.STACK_NAME.[yaml|json]
+<AWS_ACCOUNT_ID>.<REGION>.<STACK_NAME>.cfn.<FORMAT>
 ```
 
-An example of which would be `01234567890.ca-central-1.example-app.yaml`
-for a CloudFormation stack named `example-app` residing in `ca-central-1`
-within the AWS account with ID `01234567890`.
+For example:
+
+- `012345678901.us-east-1.my-application-stack.cfn.yaml`
+- `012345678901.us-west-2.database-stack.cfn.json`
+
+The format extension (`.yaml` or `.json`) is automatically determined by analyzing the template content.
+
+## Use Cases
+
+- **Infrastructure Auditing**: Snapshot all your CloudFormation templates for compliance reviews
+- **Documentation**: Export templates to include in architecture documentation
+- **Code Archaeology**: Analyze historical infrastructure changes by comparing template snapshots
+- **Backup**: Store copies of critical infrastructure templates for disaster recovery
+- **Migration**: Prepare for cross-account or cross-region migrations
+
+## AWS Permissions
+
+The following AWS permissions are required:
+
+- cloudformation:DescribeStacks
+- cloudformation:GetTemplate
+- ec2:DescribeRegions
+- sts:GetCallerIdentity
+
+## Development
+
+### Prerequisites
+
+- Go 1.24 or higher
+- AWS account for integration testing
+
+### Build
+
+```bash
+make build
+```
+### Test
+
+```bash
+make test
+```
+
+### Security Checks
+
+```bash
+make check
+```
+
+### Format Code
+
+```bash
+make fmt
+```
 
 ## Contributing
 
-1. Fork the repository.
-1. Make your change.
-1. Ensure `make fmt` is run.
-1. Ensure `make test` completes successfully.
-1. Make a Pull Request.
-1. Add a clear, concise summary in the Pull Request.
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+1. Create a feature branch (`git checkout -b feature/amazing-feature`)
+1. Commit your changes (`git commit -m 'Add amazing feature'`)
+1. Push to your branch `(git push origin feature/amazing-feature`)
+1. Open a Pull Request
+
+Before submitting:
+
+- Run `make fmt` to ensure consistent code formatting
+- Run `make test` to verify all tests pass
+- Run `make check` to perform security and code quality checks
 
 ## License
 
-[MIT](LICENSE)
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
