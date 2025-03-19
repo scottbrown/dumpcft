@@ -14,9 +14,18 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type CloudFormationSvcAPI interface {
+	DescribeStacks(ctx context.Context, params *cloudformation.DescribeStacksInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStacksOutput, error)
+	GetTemplate(ctx context.Context, params *cloudformation.GetTemplateInput, optFns ...func(*cloudformation.Options)) (*cloudformation.GetTemplateOutput, error)
+}
+
+type STSSvcAPI interface {
+	GetCallerIdentity(ctx context.Context, params *sts.GetCallerIdentityInput, optFns ...func(*sts.Options)) (*sts.GetCallerIdentityOutput, error)
+}
+
 type Dumper struct {
-	CloudFormationClient *cloudformation.Client
-	STSClient            *sts.Client
+	CloudFormationClient CloudFormationSvcAPI
+	STSClient            STSSvcAPI
 	OutputDir            string
 }
 
