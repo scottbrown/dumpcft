@@ -21,7 +21,7 @@ Download the latest release from the [releases page](https://github.com/scottbro
 
 ### From Source
 
-If you have Go 1.24+ installed:
+If you have Go 1.27.4+ installed:
 
 ```bash
 go install github.com/scottbrown/dumpcft/cmd@latest
@@ -104,7 +104,7 @@ The following AWS permissions are required:
 
 ### Prerequisites
 
-- Go 1.24 or higher
+- Go 1.27.4 or higher
 - AWS account for integration testing
 
 ### Build
